@@ -8,7 +8,6 @@ from utils import read_csv, write_csv
 from train import train
 from pathlib import Path
 import time
-import pandas as pd
 import numpy as np
 import scipy.io
 
@@ -19,7 +18,7 @@ time_start = time.time()
 
 ############# LES VARIABLES ################
 
-folder_result = "piche"  # le nom du dossier de résultat
+folder_result = "2_initialized_xavier"  # le nom du dossier de résultat
 
 random_seed_train = np.random.randint(
     1, 100000
@@ -31,11 +30,11 @@ random_seed_test = (
 
 ##### Le modèle de résolution de l'équation de la chaleur
 nb_itt = 5000  # le nb d'epoch
-resample_rate = 500  # le taux de resampling
+resample_rate = 250  # le taux de resampling
 display = 500  # le taux d'affichage
 poids = [1, 1]  # les poids pour la loss
 
-n_data = 1000  # le nb de points initiaux
+n_data = 5000  # le nb de points initiaux
 n_pde = 10000  # le nb de points pour la pde
 
 n_data_test = 5000
@@ -43,7 +42,7 @@ n_pde_test = 5000
 
 Re = 3900
 
-lr = 1e-4
+lr = 3e-4
 
 x_proba_max = 1
 x_proba_min = 4
@@ -56,13 +55,10 @@ proba = 0.0
 ###############################################
 
 # La data
-mat_data = scipy.io.loadmat("cylinder_Re3900_ke_all_100snaps.mat")
+mat_data = scipy.io.loadmat("cylinder_data.mat")
 data = mat_data["stack"]
 
 # On adimensionne la data
-df_modified = df[
-    (df["Points:0"] >= -0.07) & (df["Points:1"] >= -0.1) & (df["Points:1"] <= 0.1)
-]
 x, y, t = data[:, 0], data[:, 1], data[:, 2]
 u, v, p = data[:, 3], data[:, 4], data[:, 5]
 
